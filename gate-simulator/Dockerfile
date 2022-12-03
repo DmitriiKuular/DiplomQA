@@ -1,13 +1,11 @@
 FROM node:latest
 
-WORKDIR usr/src/app
-
-COPY package*.json ./
-
-RUN npm install
+WORKDIR /opt/app
 
 COPY . .
 
-EXPOSE 9999
+RUN npm install
 
-CMD ["node", "app.js"]
+CMD ["npm", "start"]
+
+EXPOSE 9999

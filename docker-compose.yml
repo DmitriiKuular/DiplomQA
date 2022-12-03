@@ -11,8 +11,8 @@ services:
       MYSQL_DATABASE: app
       MYSQL_USER: app
       MYSQL_PASSWORD: pass
-  node:
+  node-app:
     build: ./gate-simulator
-    environment:
-      - NODE_ENV=production
-    command: "npm start -port=9999"
+    image: node-app:1.0
+    ports:
+      - '9999:9999'
