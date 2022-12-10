@@ -1,23 +1,40 @@
 package ru.netology.diplom.test;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import ru.netology.diplom.data.DateDataGenerator;
-import ru.netology.diplom.data.OtherDataGenerator;
+
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
+import ru.netology.diplom.data.*;
 import ru.netology.diplom.page.PurchasePage;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static ru.netology.diplom.data.SQLHelper.*;
 
-public class PurchaseTest {
+public class PaymentTest {
+
+//    @BeforeAll
+//    static void setUpAll() {
+//        SelenideLogger.addListener("allure", new AllureSelenide());
+//    }
+//
+//    @AfterAll
+//    static void tearDownAll() {
+//        SelenideLogger.removeListener("allure");
+//    }
 
     @BeforeEach
     void start() {
         open("http://localhost:8080");
     }
+
+//    @AfterEach
+//    void teardown() {
+//        cleanDatabase();
+//    }
 
     @Test
     @DisplayName("Should fill the form successful first card data")
@@ -30,6 +47,7 @@ public class PurchaseTest {
                 firstCardData.getCardOwner(), firstCardData.getCvcCode());
         purchasePage.successNotification.shouldBe(visible, Duration.ofSeconds(10))
                 .shouldHave(exactText("Успешно " + "Операция одобрена Банком."));
+        assertEquals("APPROVED", SQLHelper.getPaymentCardStatus());
     }
 
     @Test
@@ -55,6 +73,7 @@ public class PurchaseTest {
                 secondCardData.getCardOwner(), secondCardData.getCvcCode());
         purchasePage.successNotification.shouldBe(visible, Duration.ofSeconds(10))
                 .shouldHave(exactText("Успешно " + "Операция одобрена Банком."));
+        assertEquals(getPaymentCardStatus(), "DECLINED");
     }
 
     @Test //Не забыть написать в title shouldBe(exactOwnText("Покупка туров"))
@@ -64,5 +83,8 @@ public class PurchaseTest {
         purchase.title.shouldBe(exactOwnText("AQA: Заявка на карту"));
     }
 
-
+//    @Test
+//    void test() {
+//        System.out.println(SQLHelper.getPaymentCardStatus() + "APPROVED  DECLINED");
+//    }
 }

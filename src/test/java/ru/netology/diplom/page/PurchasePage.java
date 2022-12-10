@@ -3,9 +3,6 @@ package ru.netology.diplom.page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
