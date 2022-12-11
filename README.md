@@ -22,8 +22,10 @@
  1. В IDEA открыть Terminal:
     * в первой вкладке терминала ввести команду: docker-compose up;
     * создать вторую вкладку терминала;
-    * во второй вкладке терминала ввести команду: java -jar artifacts/aqa-shop.jar.
- 1. Можно запускать тесты.
+    * во второй вкладке терминала ввести команду: java -jar artifacts/aqa-shop.jar. 
+ 1. На проверочном устройстве должна быть выставлена Автоматическая установка даты и времени.
+
+ **Можно запускать тесты.**
 
 
 [![Build status](https://ci.appveyor.com/api/projects/status/o5tx26dok5vpi8dc?svg=true)](https://ci.appveyor.com/project/DmitriiKuular/diplomqa)

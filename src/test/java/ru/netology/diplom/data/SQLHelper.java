@@ -15,9 +15,20 @@ public class SQLHelper {
     private static Connection getConn() {
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
     }
-//            order_entity        credit_request_entity
-    public static String getPaymentCardStatus() {
+//            order_entity
+    public static String getCardStatusWhenPayment() {
         var statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1";
+        try (var conn = getConn()) {
+            var result = runner.query(conn, statusSQL, new ScalarHandler<String>());
+            return result;
+        } catch (SQLException exception) {
+            System.err.println("Транзакция не прошла");
+        }
+        return null;
+    }
+
+    public static String getCardStatusWhenCredit() {
+        var statusSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1";
         try (var conn = getConn()) {
             var result = runner.query(conn, statusSQL, new ScalarHandler<String>());
             return result;

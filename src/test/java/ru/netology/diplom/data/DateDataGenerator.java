@@ -1,11 +1,9 @@
 package ru.netology.diplom.data;
 
-import com.github.javafaker.Faker;
 import lombok.Value;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class DateDataGenerator {
 
@@ -14,46 +12,43 @@ public class DateDataGenerator {
 
     private static LocalDate date = LocalDate.now();
 
-    //Возвращает валидную дату (рандом от текущей до ровно 5 лет от текущей)
-    //От параметра season завист то, что мы возвращаем (либо месяц, либо год)
-    public static String returnCorrectDate(String season) {
-        int[] correctCardPeriodYear = new int[]{0, 1, 2, 3, 4, 5};
-        int n = (int)Math.floor(Math.random() * correctCardPeriodYear.length);
-        int correctYear = correctCardPeriodYear[n];
-
-        String currentDate = date.plusYears(correctYear).format(DateTimeFormatter.ofPattern("MM.yy"));
-        String month = currentDate.substring(0, 2);
-        String year = currentDate.substring(3);
-        if (season.equals("month")) {
-            return month;
-        }
-        if (season.equals("year")) {
-            return year;
-        }
-        return null;
+    //Генерирует текущую дату для проверки нижней границы срока действия карты
+    public static String generateLowerBoundCardPeriodYear(String season) {
+        String currentDate = date.format(DateTimeFormatter.ofPattern("MM.yy"));
+        String result = cutNecessaryDatePeriod(currentDate, season);
+        return result;
     }
 
-    //Генерирует дату на месяц позже от текущей
+
+    //Генерирует дату ровно на пять лет больше текущей.
+    //Для проверки верхней границы срока действия карты (банковская карта выдается максимум на 5 лет)
+    public static String generateUpperBoundCardPeriod(String season) {
+        String upperBoundDate = date.plusYears(5).format(DateTimeFormatter.ofPattern("MM.yy"));
+        String result = cutNecessaryDatePeriod(upperBoundDate, season);
+        return result;
+    }
+
+    //Генерирует предыдущий месяц от текущего (негативный сценарий)
     public static String generatePreviousMonthDate(String season) {
         String previousMonth = date.minusMonths(1).format(DateTimeFormatter.ofPattern("MM.yy"));
-        String month = previousMonth.substring(0, 2);
-        String year = previousMonth.substring(3);
-        if (season.equals("month")) {
-            return month;
-        }
-        if (season.equals("year")) {
-            return year;
-        }
-        return null;
+        String result = cutNecessaryDatePeriod(previousMonth, season);
+        return result;
     }
 
-    //Генерирует дату на пять лет и один месяц болще текущей.
-    //Для негативного сценария (бановская карта выдается максимум на  лет)
+    //Генерирует дату на пять лет и один месяц больше текущей.
+    //Для негативного сценария (банковская карта выдается максимум на 5 лет)
     public static String generateOverCardPeriodYear(String season) {
         String overCardPeriodYear = date.plusYears(5).plusMonths(1)
                 .format(DateTimeFormatter.ofPattern("MM.yy"));
-        String month = overCardPeriodYear.substring(0, 2);
-        String year = overCardPeriodYear.substring(3);
+        String result = cutNecessaryDatePeriod(overCardPeriodYear, season);
+        return result;
+    }
+
+    //Метод помогает возвращать либо месяц, либо год от сгенерированной даты в зависимости от запроса
+    //От параметра season зависит то, что мы возвращаем (либо месяц, либо год)
+    public static String cutNecessaryDatePeriod(String cutDate, String season) {
+        String month = cutDate.substring(0, 2);
+        String year = cutDate.substring(3);
         if (season.equals("month")) {
             return month;
         }
@@ -63,27 +58,36 @@ public class DateDataGenerator {
         return null;
     }
 
-    public static String generateOwner(String locale) {
-        Faker faker = new Faker(new Locale(locale));
-        String name = faker.name().fullName();
-        return name;
+    public static DateDataGenerator.CardDate getLowerBoundDate() {
+        return new DateDataGenerator.CardDate(generateLowerBoundCardPeriodYear("month"),
+                generateLowerBoundCardPeriodYear("year"));
     }
 
-    public static DateDataGenerator.CardDate getCorrectCardDate() {
-        return new DateDataGenerator.CardDate(returnCorrectDate("month"), returnCorrectDate("year"));
+    public static DateDataGenerator.CardDate getUpperBoundDate() {
+        return new DateDataGenerator.CardDate(generateUpperBoundCardPeriod("month"),
+                generateUpperBoundCardPeriod("year"));
     }
 
     public static DateDataGenerator.CardDate getPreviousCardDate() {
-        return new DateDataGenerator.CardDate(generatePreviousMonthDate("month"), generatePreviousMonthDate("year"));
+        return new DateDataGenerator.CardDate(generatePreviousMonthDate("month"),
+                generatePreviousMonthDate("year"));
     }
 
     public static DateDataGenerator.CardDate getOverCardDate() {
-        return new DateDataGenerator.CardDate(generateOverCardPeriodYear("month"), generateOverCardPeriodYear("year"));
+        return new DateDataGenerator.CardDate(generateOverCardPeriodYear("month"),
+                generateOverCardPeriodYear("year"));
     }
 
     @Value
     public static class CardDate {
         private String cardMonth;
         private String cardYear;
+    }
+
+    public static String wrongValueInputDateFormat() {
+        int[] correctCardPeriodYear = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int n = (int)Math.floor(Math.random() * correctCardPeriodYear.length);
+        int wrongFormatValue = correctCardPeriodYear[n];
+        return String.valueOf(wrongFormatValue);
     }
 }
