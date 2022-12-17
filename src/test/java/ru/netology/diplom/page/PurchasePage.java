@@ -1,43 +1,52 @@
 package ru.netology.diplom.page;
 
-
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.*;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.*;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 
 public class PurchasePage {
 
     //Кнопки
-    private SelenideElement buttonBuy = $$(".button").find(exactText("Купить"));
-    private SelenideElement buttonBuyInCredit = $$(".button").find(exactText("Купить в кредит"));
-    private SelenideElement buttonContinue = $$(".button").find(exactText("Продолжить"));
+    private static SelenideElement buttonBuy = $$(".button").find(exactText("Купить"));
+    private static SelenideElement buttonBuyInCredit = $$(".button").find(exactText("Купить в кредит"));
+    private static SelenideElement buttonContinue = $$(".button").find(exactText("Продолжить"));
 
     //Поля
     private SelenideElement cardNumberField = $("[placeholder='0000 0000 0000 0000']");
     private SelenideElement monthField = $("[placeholder='08']");
     private SelenideElement yearField = $("[placeholder='22']");
     private SelenideElement cvcCodeField = $("[placeholder='999']");
-    private SelenideElement ownerField = $$(".input__control").get(3);
+    private SelenideElement ownerField = $(byXpath("//span[text()='Владелец']/parent::span//input[@class='input__control']"));
 
-    //Тексе title
+
+    //Текст title
     private SelenideElement title = $("title");
 
-    //Уведомления
-    private SelenideElement notificationInMonth = $(".input__sub");
-    private SelenideElement errorNotification = $(".notification_status_error");
-    //"Ошибка" + "Ошибка! Банк отказал в проведении операции."
-    private SelenideElement successNotification = $(".notification_status_ok");
-    //"Успешно" + "Операция одобрена Банком."
+    //Уведомления полей
+    private SelenideElement errorInCardNumberField = $(byXpath
+            ("//input[@placeholder='0000 0000 0000 0000']/parent::span/parent::span//span[@class='input__sub']"));
+    private SelenideElement errorInMonthField = $(byXpath
+            ("//input[@placeholder='08']/parent::span/parent::span//span[@class='input__sub']"));
+    private SelenideElement errorInYearField = $(byXpath
+            ("//input[@placeholder='22']/parent::span/parent::span//span[@class='input__sub']"));
+    private SelenideElement errorInOwnerField = $(byXpath("//span[text()='Владелец']/parent::span//span[@class='input__sub']"));
+    private SelenideElement errorInCVCCodeField = $(byXpath
+            ("//input[@placeholder='999']/parent::span/parent::span//span[@class='input__sub']"));
+
+    //Уведомления приложения
+    private SelenideElement errorNotificationOfTransaction = $(".notification_status_error");
+    //"Ошибка " + "Ошибка! Банк отказал в проведении операции."
+    private SelenideElement successNotificationOfTransaction = $(".notification_status_ok");
+    //"Успешно " + "Операция одобрена Банком."
 
 
-    public PurchasePage fillThePaymentForm (String cardNumber, String month, String year, String owner, String cvc) {
+    public PurchasePage fillThePaymentForm(String cardNumber, String month, String year, String owner, String cvc) {
         buttonBuy.click();
         cardNumberField.setValue(cardNumber);
         monthField.setValue(month);
@@ -48,7 +57,7 @@ public class PurchasePage {
         return this;
     }
 
-    public PurchasePage fillTheCreditForm (String cardNumber, String month, String year, String owner, String cvc) {
+    public PurchasePage fillTheCreditForm(String cardNumber, String month, String year, String owner, String cvc) {
         buttonBuyInCredit.click();
         cardNumberField.setValue(cardNumber);
         monthField.setValue(month);
@@ -57,5 +66,15 @@ public class PurchasePage {
         ownerField.setValue(owner);
         buttonContinue.click();
         return this;
+    }
+
+    public static void sendEmptyPaymentForm() {
+        buttonBuy.click();
+        buttonContinue.click();
+    }
+
+    public static void sendEmptyCreditForm() {
+        buttonBuyInCredit.click();
+        buttonContinue.click();
     }
 }

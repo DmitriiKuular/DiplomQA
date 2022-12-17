@@ -11,11 +11,17 @@ public class SQLHelper {
 
     private SQLHelper() {}
 
-    @SneakyThrows
+    @SneakyThrows //MySQL
     private static Connection getConn() {
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
     }
+
+//    @SneakyThrows //PostgreSQL
+//    private static Connection getConn() {
+//        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/kuularbase", "kuular", "12345v");
+//    }
 //            order_entity
+
     public static String getCardStatusWhenPayment() {
         var statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1";
         try (var conn = getConn()) {

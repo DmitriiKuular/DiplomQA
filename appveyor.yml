@@ -10,6 +10,8 @@ build: off
 
 install:
 
+  - ps: Install-Product node $env:nodejs_latest
+  - npm install
   - docker-compose up &
   - java -jar ./artifacts/aqa-shop.jar &
 
