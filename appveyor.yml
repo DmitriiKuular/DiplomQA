@@ -8,9 +8,12 @@ branches:
 
 build: off
 
+environment:
+  nodejs_version: "latest"
+
 install:
 
-  - ps: Install-Product node $env:nodejs_latest
+  - ps: Install-Product node $env:nodejs_version
   - npm install
   - docker-compose up &
   - java -jar ./artifacts/aqa-shop.jar &
