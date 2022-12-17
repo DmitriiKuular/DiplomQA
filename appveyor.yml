@@ -12,12 +12,17 @@ init:
   - git config --global core.autocrlf true
 
 environment:
-  matrix:
-    - nodejs_version: latest
+  - nodejs_version: latest
+
+platform:
+  - x64
 
 install:
 
-  - ps: Install-Product node $env:nodejs_version
+  - powershell ./build.ps1
+  - cmd: powershell ./build.ps1
+
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
   - docker-compose up &
   - java -jar ./artifacts/aqa-shop.jar &
