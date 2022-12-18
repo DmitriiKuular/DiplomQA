@@ -12,7 +12,6 @@ import java.time.Duration;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.netology.diplom.data.OtherDataGenerator.*;
 import static ru.netology.diplom.data.SQLHelper.*;
 import static ru.netology.diplom.page.PurchasePage.*;
 
@@ -64,26 +63,26 @@ public class PaymentTest {
                 correctCardData.getCardMonth(), correctCardData.getCardYear(),
                 secondCardData.getCardOwner(), secondCardData.getCvcCode());
         successNotification.shouldBe(visible, Duration.ofSeconds(15))
-                .shouldHave(exactText("Успешно " + "Операция одобрена Банком."));
+                .shouldHave(exactText("Отказ " + "Операция отклонена Банком."));
         assertEquals("DECLINED", getCardStatusWhenPayment());
     }
 
-//    @Test //Тест на отправку пустой формы
-//    @DisplayName("Should show error notifications under all the fields if send empty form")
-//    void shouldShowErrorUnderAllFieldsIfFormIsEmpty() {
-//        var purchasePage = new PurchasePage();
-//        var errorInCardNumber = purchasePage.getErrorInCardNumberField();
-//        var errorInMonth = purchasePage.getErrorInMonthField();
-//        var errorInYear = purchasePage.getErrorInYearField();
-//        var errorInOwner = purchasePage.getErrorInOwnerField();
-//        var errorInCVC = purchasePage.getErrorInCVCCodeField();
-//        sendEmptyPaymentForm();
-//        errorInCardNumber.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
-//        errorInMonth.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
-//        errorInYear.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
-//        errorInOwner.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
-//        errorInCVC.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
-//    }
+    @Test //Тест на отправку пустой формы
+    @DisplayName("Should show error notifications under all the fields if send empty form")
+    void shouldShowErrorUnderAllFieldsIfFormIsEmpty() {
+        var purchasePage = new PurchasePage();
+        var errorInCardNumber = purchasePage.getErrorInCardNumberField();
+        var errorInMonth = purchasePage.getErrorInMonthField();
+        var errorInYear = purchasePage.getErrorInYearField();
+        var errorInOwner = purchasePage.getErrorInOwnerField();
+        var errorInCVC = purchasePage.getErrorInCVCCodeField();
+        sendEmptyPaymentForm();
+        errorInCardNumber.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
+        errorInMonth.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
+        errorInYear.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
+        errorInOwner.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
+        errorInCVC.shouldBe(visible).shouldHave(exactText("Поле обязательно для заполнения"));
+    }
 
     @Test //Тест на валидацию поля "Номер карты". Поле заполнено номером из 15ти значений
     @DisplayName("Should show error notification if fill in 15th values in card number field")
@@ -129,18 +128,18 @@ public class PaymentTest {
         assertEquals("APPROVED", getCardStatusWhenPayment());
     }
 
-//    @Test // Тест на ввод данных истекшего срока действия карты на месяц, по принципу граничных значений
-//    @DisplayName("Should fill in the form card data with previous month date")
-//    void shouldFillPreviousMonthDateCard() {
-//        var purchasePage = new PurchasePage();
-//        var firstCardData = OtherDataGenerator.getFirstCardData("en");
-//        var previousCardDate = DateDataGenerator.getPreviousMonthCardDate();
-//        var errorNotification = purchasePage.getErrorInMonthField();
-//        purchasePage.fillThePaymentForm(firstCardData.getCardNumber(),
-//                previousCardDate.getCardMonth(), previousCardDate.getCardYear(),
-//                firstCardData.getCardOwner(), firstCardData.getCvcCode());
-//        errorNotification.shouldBe(visible).shouldHave(exactText("Истёк срок действия карты"));
-//    }
+    @Test // Тест на ввод данных истекшего срока действия карты на месяц, по принципу граничных значений
+    @DisplayName("Should fill in the form card data with previous month date")
+    void shouldFillPreviousMonthDateCard() {
+        var purchasePage = new PurchasePage();
+        var firstCardData = OtherDataGenerator.getFirstCardData("en");
+        var previousCardDate = DateDataGenerator.getPreviousMonthCardDate();
+        var errorNotification = purchasePage.getErrorInMonthField();
+        purchasePage.fillThePaymentForm(firstCardData.getCardNumber(),
+                previousCardDate.getCardMonth(), previousCardDate.getCardYear(),
+                firstCardData.getCardOwner(), firstCardData.getCvcCode());
+        errorNotification.shouldBe(visible).shouldHave(exactText("Истёк срок действия карты"));
+    }
 
     @Test // Тест на ввод предыдущего года от текущего в поле "Год"
     @DisplayName("Should fill in the form card data with previous year date")
@@ -168,17 +167,17 @@ public class PaymentTest {
         errorNotification.shouldBe(visible).shouldHave(exactText("Неверно указан срок действия карты"));
     }
 
-//    @Test //Тест на ввод значения "00" в поле "Месяц"
-//    @DisplayName("Should show error notification if fill in '00' in Month input")
-//    void shouldShowErrorIfNullNullValueInMonthInput(){
-//        var purchasePage = new PurchasePage();
-//        var correctCardData = OtherDataGenerator.getRightDataCard("en");
-//        var nextYearsDate = DateDataGenerator.getUpperBoundDate();
-//        var errorNotification = purchasePage.getErrorInMonthField();
-//        purchasePage.fillThePaymentForm(correctCardData.getCardNumber(), "00", nextYearsDate.getCardYear(),
-//                correctCardData.getCardOwner(), correctCardData.getCvcCode());
-//        errorNotification.shouldBe(visible).shouldHave(exactText("Неверно указан срок действия карты"));
-//    }
+    @Test //Тест на ввод значения "00" в поле "Месяц"
+    @DisplayName("Should show error notification if fill in '00' in Month input")
+    void shouldShowErrorIfNullNullValueInMonthInput(){
+        var purchasePage = new PurchasePage();
+        var correctCardData = OtherDataGenerator.getRightDataCard("en");
+        var nextYearsDate = DateDataGenerator.getUpperBoundDate();
+        var errorNotification = purchasePage.getErrorInMonthField();
+        purchasePage.fillThePaymentForm(correctCardData.getCardNumber(), "00", nextYearsDate.getCardYear(),
+                correctCardData.getCardOwner(), correctCardData.getCvcCode());
+        errorNotification.shouldBe(visible).shouldHave(exactText("Неверно указан срок действия карты"));
+    }
 
     @Test //Тест на ввод 13 месяца в поле "Месяц"
     @DisplayName("Should show error notification if fill in '13' in Month input")
@@ -218,33 +217,33 @@ public class PaymentTest {
         errorNotification.shouldBe(visible).shouldHave(exactText("Неверный формат"));
     }
 
-//    @Test //Ввод невалидных данных в поле "Владелец" на кириллице
-//    @DisplayName("Should show error notification if fill invalid cyrillic values in owner field")
-//    void shouldShowErrorIfInvalidCyrillicValuesInOwner() {
-//        var purchasePage = new PurchasePage();
-//        var correctCardData = OtherDataGenerator.getRightDataCard("en");
-//        var wrongCardData = OtherDataGenerator.getWrongDataCard("ru");
-//        var cardPeriod = DateDataGenerator.getLowerBoundDate();
-//        var errorOwner = purchasePage.getErrorInOwnerField();
-//        purchasePage.fillThePaymentForm(correctCardData.getCardNumber(), cardPeriod.getCardMonth(),
-//                cardPeriod.getCardYear(), wrongCardData.getCardOwner(),
-//                correctCardData.getCvcCode());
-//        errorOwner.shouldBe(visible).shouldHave(exactText("Неверный формат"));
-//    }
+    @Test //Ввод невалидных данных в поле "Владелец" на кириллице
+    @DisplayName("Should show error notification if fill invalid cyrillic values in owner field")
+    void shouldShowErrorIfInvalidCyrillicValuesInOwner() {
+        var purchasePage = new PurchasePage();
+        var correctCardData = OtherDataGenerator.getRightDataCard("en");
+        var wrongCardData = OtherDataGenerator.getWrongDataCard("ru");
+        var cardPeriod = DateDataGenerator.getLowerBoundDate();
+        var errorOwner = purchasePage.getErrorInOwnerField();
+        purchasePage.fillThePaymentForm(correctCardData.getCardNumber(), cardPeriod.getCardMonth(),
+                cardPeriod.getCardYear(), wrongCardData.getCardOwner(),
+                correctCardData.getCvcCode());
+        errorOwner.shouldBe(visible).shouldHave(exactText("Неверный формат"));
+    }
 
-//    @Test //Ввод невалидных данных в поле "Владелец", включая спецсимволы
-//    @DisplayName("Should show error notification if fill invalid cyrillic values in owner field")
-//    void shouldShowErrorIfInvalidValuesInOwner() {
-//        var purchasePage = new PurchasePage();
-//        var correctCardData = OtherDataGenerator.getRightDataCard("en");
-//        var cardPeriod = DateDataGenerator.getLowerBoundDate();
-//        var invalidSymbolsForOwnerField = OtherDataGenerator.getInvalidSymbolsForOwnerField();
-//        var errorOwner = purchasePage.getErrorInOwnerField();
-//        purchasePage.fillThePaymentForm(correctCardData.getCardNumber(), cardPeriod.getCardMonth(),
-//                cardPeriod.getCardYear(), correctCardData.getCardOwner() + invalidSymbolsForOwnerField,
-//                correctCardData.getCvcCode());
-//        errorOwner.shouldBe(visible).shouldHave(exactText("Неверный формат"));
-//    }
+    @Test //Ввод невалидных данных в поле "Владелец", включая спецсимволы
+    @DisplayName("Should show error notification if fill invalid symbols values in owner field")
+    void shouldShowErrorIfInvalidValuesInOwner() {
+        var purchasePage = new PurchasePage();
+        var correctCardData = OtherDataGenerator.getRightDataCard("en");
+        var cardPeriod = DateDataGenerator.getLowerBoundDate();
+        var invalidSymbolsForOwnerField = OtherDataGenerator.getInvalidSymbolsForOwnerField();
+        var errorOwner = purchasePage.getErrorInOwnerField();
+        purchasePage.fillThePaymentForm(correctCardData.getCardNumber(), cardPeriod.getCardMonth(),
+                cardPeriod.getCardYear(), correctCardData.getCardOwner() + invalidSymbolsForOwnerField,
+                correctCardData.getCvcCode());
+        errorOwner.shouldBe(visible).shouldHave(exactText("Неверный формат"));
+    }
 
     @Test //Тест на ввод данных в поле "CVC код" неверного формата
     @DisplayName("Should show error notification if fill wrong format values in CVC code field")
@@ -288,11 +287,11 @@ public class PaymentTest {
                 shouldHave(exactText("Ошибка " + "Ошибка! Банк отказал в проведении операции."));
     }
 
-//    @Test //Тест на отображение текста в заголовке вкладки страницы
-//    @DisplayName("Should be right the title name")
-//    void shouldBeRightTitle() {
-//        PurchasePage purchase = new PurchasePage();
-//        var title = purchase.getTitle();
-//        title.shouldBe(exactOwnText("AQA: Покупка туров"));
-//    }
+    @Test //Тест на отображение текста в заголовке вкладки страницы
+    @DisplayName("Should be right the title name")
+    void shouldBeRightTitle() {
+        PurchasePage purchase = new PurchasePage();
+        var title = purchase.getTitle();
+        title.shouldBe(exactOwnText("AQA: Покупка туров"));
+    }
 }
