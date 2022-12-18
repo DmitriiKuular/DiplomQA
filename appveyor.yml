@@ -8,20 +8,8 @@ branches:
 
 build: off
 
-init:
-  - git config --global core.autocrlf true
-
-environment:
-  nodejs_version: latest
-
-platform:
-  - x64
-
 install:
-
-  - ps: Install-Product node $env:nodejs_version $env:platform
-  - npm install
-  - docker-compose up &
+  - docker-compose up -d &
   - java -jar ./artifacts/aqa-shop.jar &
 
 build_script:
