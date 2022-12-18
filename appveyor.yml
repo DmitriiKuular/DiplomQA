@@ -9,7 +9,7 @@ branches:
 build: off
 
 install:
-  - docker-compose up -d &
+  - ./docker-compose up -d &
   - sleep 20
   - java -jar ./artifacts/aqa-shop.jar &
 
