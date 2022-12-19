@@ -244,7 +244,7 @@ public class CreditTest {
         errorOwner.shouldBe(visible).shouldHave(exactText("Неверный формат"));
     }
 
-    @Test //Тест на ввод данных в поле "CVC код" неверного формата
+    @Test //Тест на ввод данных в поле "CVC/CVV" неверного формата
     @DisplayName("Should show error notification if fill wrong format values in CVC code field")
     void shouldShowErrorIfWrongFormatInCVCCode() {
         var purchasePage = new PurchasePage();
@@ -257,8 +257,8 @@ public class CreditTest {
         errorInCVCCode.shouldBe(visible).shouldHave(exactText("Неверный формат"));
     }
 
-    @Test //Тест на заполнение невалидными данными полей 'Месяц', 'Год' и 'CVC код'
-    @DisplayName("Should not to fill fields 'Month', 'Year' and 'CVC code' with invalid values")
+    @Test //Тест на заполнение невалидными данными полей 'Месяц', 'Год' и 'CVC/CVV'
+    @DisplayName("Should not to fill fields 'Month', 'Year' and 'CVC/CVV' with invalid values")
     void shouldNotToFillFieldsWithInvalidValues() {
         var purchasePage = new PurchasePage();
         var correctCardData = OtherDataGenerator.getRightDataCard("en");
@@ -272,8 +272,8 @@ public class CreditTest {
                 shouldHave(exactText("Ошибка " + "Ошибка! Банк отказал в проведении операции."));
     }
 
-    @Test //Тест на заполнение полей 'Месяц', 'Год' и 'CVC код' данными, превышающими допустимое количество
-    @DisplayName("Should not to fill fields 'Month', 'Year' and 'CVC code' with values more then enough")
+    @Test //Тест на заполнение полей 'Месяц', 'Год' и 'CVC/CVV' данными, превышающими допустимое количество
+    @DisplayName("Should not to fill fields 'Month', 'Year' and 'CVC/CVV' with values more then enough")
     void shouldNotToFillFieldsWithValuesMoreThenEnough() {
         var purchasePage = new PurchasePage();
         var correctCardData = OtherDataGenerator.getRightDataCard("en");
