@@ -1,4 +1,4 @@
-package ru.netology.diplom.page;
+package ru.netology.diplom.pages;
 
 import com.codeborne.selenide.SelenideElement;
 import lombok.*;
@@ -13,8 +13,6 @@ import static com.codeborne.selenide.Selenide.*;
 public class PurchasePage {
 
     //Кнопки
-    private static SelenideElement buttonBuy = $$(".button").find(exactText("Купить"));
-    private static SelenideElement buttonBuyInCredit = $$(".button").find(exactText("Купить в кредит"));
     private static SelenideElement buttonContinue = $$(".button").find(exactText("Продолжить"));
 
     //Поля
@@ -23,10 +21,6 @@ public class PurchasePage {
     private SelenideElement yearField = $("[placeholder='22']");
     private SelenideElement cvcCodeField = $("[placeholder='999']");
     private SelenideElement ownerField = $(byXpath("//span[text()='Владелец']/parent::span//input[@class='input__control']"));
-
-
-    //Текст title
-    private SelenideElement title = $("title");
 
     //Уведомления полей
     private SelenideElement errorInCardNumberField = $(byXpath
@@ -47,7 +41,6 @@ public class PurchasePage {
 
 
     public PurchasePage fillThePaymentForm(String cardNumber, String month, String year, String owner, String cvc) {
-        buttonBuy.click();
         cardNumberField.setValue(cardNumber);
         monthField.setValue(month);
         yearField.setValue(year);
@@ -58,7 +51,6 @@ public class PurchasePage {
     }
 
     public PurchasePage fillTheCreditForm(String cardNumber, String month, String year, String owner, String cvc) {
-        buttonBuyInCredit.click();
         cardNumberField.setValue(cardNumber);
         monthField.setValue(month);
         yearField.setValue(year);
@@ -69,12 +61,10 @@ public class PurchasePage {
     }
 
     public static void sendEmptyPaymentForm() {
-        buttonBuy.click();
         buttonContinue.click();
     }
 
     public static void sendEmptyCreditForm() {
-        buttonBuyInCredit.click();
         buttonContinue.click();
     }
 }

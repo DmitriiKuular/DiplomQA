@@ -11,15 +11,13 @@ public class SQLHelper {
 
     private SQLHelper() {}
 
-    @SneakyThrows //MySQL
+    @SneakyThrows
     private static Connection getConn() {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+        var path = System.getProperty("url");
+        var loginUser = System.getProperty("userName");
+        var loginPass = System.getProperty("password");
+        return DriverManager.getConnection(path, loginUser, loginPass);
     }
-
-//    @SneakyThrows //PostgreSQL
-//    private static Connection getConn() {
-//        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/kuularbase", "kuular", "12345v");
-//    }
 //            order_entity
 
     public static String getCardStatusWhenPayment() {

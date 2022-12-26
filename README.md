@@ -19,14 +19,19 @@
     * после перезагрузки IDEA, в настройках перейдите в раздел Annotation Processors: File -> Settings -> поиск annotation processors;
     * в открывшемся разделе Annotation Processors поставьте галочку в чекбоксе "Enable annotation processing";
     * нажмите на кнопки Apply и Ok.
- 1. В IDEA открыть Terminal:
-    * в первой вкладке терминала ввести команду: docker-compose up;
-    * дождаться сообщения о готовности плагина к подключению;
-    * создать вторую вкладку терминала;
-    * во второй вкладке терминала ввести команду: java -jar artifacts/aqa-shop.jar. 
  1. На проверочном устройстве должна быть выставлена Автоматическая установка даты и времени.
+ 1. Запустить Docker desktop (если Вы закрыли данное приложение).
+ 1. В IDEA открыть Terminal:
+    * в первой вкладке терминала, для запуска необходимых контейнеров, ввести команду: docker-compose up;
+    * дождаться сообщения о готовности плагина к подключению;
+    * создать вторую вкладку терминала:
+       * во второй вкладке терминала, для запуска приложения совместно БД MySQl, ввести команду: java -jar artifacts/aqa-shop.jar; 
+       * во второй вкладке терминала, для запуска приложения совместно БД PostgreSQL, ввести команду: java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/kuularbase -Dspring.datasource.username=kuular -Dspring.datasource.password=12345v -jar artifacts/aqa-shop.jar.
+       * если тестируем на OC Windows, и приложение совместно БД PostgreSQL не запустилось, ввести команду: java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/kuularbase" "-Dspring.datasource.username=kuular" "-Dspring.datasource.password=12345v" -jar artifacts/aqa-shop.jar
+ 1. Запустить тесты в новой вкладке терминала командой: 
+    * если тестируем совместно с БД MySQl: ./gradlew clean test;
+    * если тестируем совместно с БД PostgreSQL: ./gradlew test -Durl=jdbc:postgresql://localhost:5432/kuularbase -DuserName=kuular -Dpassword=12345v.
 
- **Можно запускать тесты.**
 
 
 [![Build status](https://ci.appveyor.com/api/projects/status/o5tx26dok5vpi8dc?svg=true)](https://ci.appveyor.com/project/DmitriiKuular/diplomqa)
